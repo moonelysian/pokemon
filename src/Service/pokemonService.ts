@@ -12,7 +12,7 @@ export interface PokemonListResponseType {
   }[];
 }
 
-export const fetchPokemons = async (nextUrl?: string) => {
+export const fetchPokemonsApi = async (nextUrl?: string) => {
   const requestUrl = nextUrl ?? "https://pokeapi.co/api/v2/pokemon";
   const response = await remote.get<PokemonListResponseType>(requestUrl);
   return response.data;
@@ -65,7 +65,7 @@ interface PokemonSpeciesType {
   names: { language: { name: string }; name: string }[];
 }
 
-export const fetchPokemonDetail = async (
+export const fetchPokemonDetailApi = async (
   name: string
 ): Promise<PokemonDetailType> => {
   const pokemonDetailUrl = `https://pokeapi.co/api/v2/pokemon/${name}`;
@@ -76,7 +76,7 @@ export const fetchPokemonDetail = async (
   const { data: speciesData } = await remote.get<PokemonSpeciesType>(
     pokemonSpeciesUrl
   );
-  console.log(speciesData);
+
   return {
     id: data.id,
     weight: data.weight / 10, // kg 단위,
