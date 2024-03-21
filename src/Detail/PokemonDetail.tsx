@@ -1,29 +1,24 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import PokeMarkChip from "../Common/PokeMarkChip";
 import styled from "@emotion/styled";
+import PokeMarkChip from "../Common/PokeMarkChip";
 import { PokeImageSkeleton } from "../Common/PokeImageSkeleton";
+import {
+  fetchPokemonDetail,
+  PokemonDetailType,
+} from "../Service/pokemonService";
 
 const PokemonDetail = () => {
   const { name } = useParams();
-  const pokemon = {
-    id: 1,
-    koreanName: "이상해씨",
-    name: name,
-    color: "blue",
-    type: "타입",
-    height: 10,
-    weight: 10,
-    baseStats: [
-      {
-        name: "hp",
-        value: 45,
-      },
-      {
-        name: "attack",
-        value: 50,
-      },
-    ],
-  };
+  const [pokemon, setPokemon] = useState<PokemonDetailType | null>(null);
+
+  useEffect(() => {
+    if (!name) return;
+    (async () => {
+      const pokemon = await fetchPokemonDetail(name);
+      setPokemon(pokemon);
+    })();
+  }, [name]);
 
   if (!pokemon) {
     return (
@@ -41,12 +36,7 @@ const PokemonDetail = () => {
   return (
     <Container>
       <ImageContainer>
-        <Image
-          src={
-            "https://cdn.econovill.com/news/photo/201603/285365_95988_038.png"
-          }
-          alt={pokemon.koreanName}
-        />
+        <Image src={pokemon.images.dreamWorldFront} alt={pokemon.koreanName} />
       </ImageContainer>
       <Divider />
       <Body>
@@ -63,7 +53,7 @@ const PokemonDetail = () => {
             </TableRow>
             <TableRow>
               <TableHeader>타입</TableHeader>
-              <td>{pokemon.type.toString()}</td>
+              <td>{pokemon.types.toString()}</td>
             </TableRow>
             <TableRow>
               <TableHeader>키</TableHeader>
