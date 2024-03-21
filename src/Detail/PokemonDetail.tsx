@@ -7,8 +7,12 @@ import {
   fetchPokemonDetail,
   PokemonDetailType,
 } from "../Service/pokemonService";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store";
 
 const PokemonDetail = () => {
+  const imageType = useSelector((state: RootState) => state.imageType.type);
+
   const { name } = useParams();
   const [pokemon, setPokemon] = useState<PokemonDetailType | null>(null);
 
@@ -36,7 +40,7 @@ const PokemonDetail = () => {
   return (
     <Container>
       <ImageContainer>
-        <Image src={pokemon.images.dreamWorldFront} alt={pokemon.koreanName} />
+        <Image src={pokemon.images[imageType]} alt={pokemon.koreanName} />
       </ImageContainer>
       <Divider />
       <Body>

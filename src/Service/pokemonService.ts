@@ -50,7 +50,7 @@ export interface PokemonDetailType {
   images: {
     frontDefault: string;
     dreamWorldFront: string;
-    officialArtWorkFront: string;
+    officialArtworkFront: string;
   };
   baseStats: {
     name: string;
@@ -86,7 +86,7 @@ export const fetchPokemonDetail = async (
     images: {
       frontDefault: data.sprites.front_default,
       dreamWorldFront: data.sprites.other?.dream_world.front_default,
-      officialArtWorkFront:
+      officialArtworkFront:
         data.sprites?.other?.["official-artwork"].front_default,
     },
     baseStats: data.stats.map((item) => ({

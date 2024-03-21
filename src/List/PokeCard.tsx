@@ -9,12 +9,15 @@ import {
   fetchPokemonDetail,
   PokemonDetailType,
 } from "../Service/pokemonService";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store";
 
 interface PokeCardProps {
   name: string;
 }
 
 const PokeCard = ({ name }: PokeCardProps) => {
+  const imageType = useSelector((state: RootState) => state.imageType.type);
   const [pokemon, setPokemon] = useState<PokemonDetailType | null>(null);
   const navigate = useNavigate();
 
@@ -59,7 +62,7 @@ const PokeCard = ({ name }: PokeCardProps) => {
         />
       </Header>
       <Body>
-        <Image src={pokemon.images.dreamWorldFront} alt={pokemon.name} />
+        <Image src={pokemon.images[imageType]} alt={pokemon.name} />
       </Body>
       <Footer>
         <PokeMarkChip />
