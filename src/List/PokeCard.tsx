@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
+import { useIntersectionObserver } from "react-intersection-observer-hook";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import PokeNameChip from "../Common/PokeNameChip";
 import PokeMarkChip from "../Common/PokeMarkChip";
 import { PokeImageSkeleton } from "../Common/PokeImageSkeleton";
-import { useEffect, useState } from "react";
 import {
   fetchPokemonDetail,
   PokemonDetailType,
@@ -17,13 +18,16 @@ const PokeCard = ({ name }: PokeCardProps) => {
   const [pokemon, setPokemon] = useState<PokemonDetailType | null>(null);
   const navigate = useNavigate();
 
+  const [ref, { entry }] = useIntersectionObserver();
+  const isVisible = entry && entry.isIntersecting;
+
   useEffect(() => {
-    if (!name) return;
+    if (!name || !isVisible) return;
     (async () => {
       const pokemon = await fetchPokemonDetail(name);
       setPokemon(pokemon);
     })();
-  }, [name]);
+  }, [isVisible, name]);
 
   const handleClick = () => {
     navigate(`/pokemon/${name}`);
@@ -31,7 +35,7 @@ const PokeCard = ({ name }: PokeCardProps) => {
 
   if (!pokemon) {
     return (
-      <Container color={"#32CD32"}>
+      <Container color={"#32CD32"} ref={ref}>
         <Header>
           <PokeNameChip name={name} id={0} numberColor={"#32CD32"} />
         </Header>
@@ -46,7 +50,7 @@ const PokeCard = ({ name }: PokeCardProps) => {
   }
 
   return (
-    <Container onClick={handleClick} color={pokemon.color}>
+    <Container onClick={handleClick} color={pokemon.color} ref={ref}>
       <Header>
         <PokeNameChip
           name={pokemon.koreanName}
