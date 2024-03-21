@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+## Preview
+https://github.com/moonelysian/pokemon/assets/37898263/ee6343b2-69e5-4137-9922-822ef15846aa
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 프로젝트 실행 방법
+```
+npm start
+```
+## 배포 주소
+https://pokemon-ezetgcz3h-moonelysians-projects.vercel.app/
 
-## Available Scripts
+## 기술 스택
+### Development
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">  <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
 
-In the project directory, you can run:
+### Environment
+<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
 
-### `npm start`
+## 트러블 슈팅
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 문제점
+1. 포켓몬 상세페이지에 다녀오면 fetchPokemons의 초기 api가 재호출되면서 포켓몬 목록이 중복되는 현상을 발견했다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 해결
+1. `condition`으로 nextUrl이 비어서 호출되는 경우 pokemons의 배열 길이를 확인했다. 이미 배열이 차있는 경우엔 페이지 첫 랜딩이 아닌 것으로 판단하여 현재 상태의 state를 변경하지않도록 하니 해결됐다.
+  ```ts
+  // pokemonSlice.ts
+  ...
+    {
+      condition(nextUrl, { getState }) {
+        const { pokemons } = getState() as RootState;
+        if (!nextUrl && pokemons.pokemons.results.length > 0) return false;
+        return true;
+      },
+    }
+  ...
+  ```
+2. 추가적으로 해당 함수를 dispatch하는 useEffect 내부에서 거르는 것도 생각해봤다.
+   ```ts
+   useEffect(() => {
+     if (pokemons) return;
+     dispatch(fetchPokemons());
+   } ,[pokemon])
+   ```
+이렇게 해도 useInfiniteScrollHook 덕분에 nextUrl을 가져올 수 있어서 중복없이 호출이 가능했다. 이 방법을 사용하지 않은 이유는 해당 api를 호출하는 곳마다 방어 코드를 작성하는 번거로움이 있었기 때문이다.
