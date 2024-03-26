@@ -6,8 +6,8 @@ https://github.com/moonelysian/pokemon/assets/37898263/ee6343b2-69e5-4137-9922-8
 npm start
 ```
 ## 배포 주소
-https://pokemon-ezetgcz3h-moonelysians-projects.vercel.app/
-
+[https://pokemon-ezetgcz3h-moonelysians-projects.vercel.app/
+](https://pokemon-orcin-eight.vercel.app/)
 ## 기술 스택
 ### Development
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">  <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
